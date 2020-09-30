@@ -13,8 +13,8 @@ int main()
 	s.insert(1);
 	s.insert(0);
 	s.show();
-	set<int>A;
-	A.merge(s);
-	A.show();
+
+
+
 	return 0;
 }

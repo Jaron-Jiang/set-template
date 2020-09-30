@@ -47,17 +47,19 @@ private:
 
 	void insert(Data* p, T val);
 
+	void erase(Data* p);
+
 public:
 	set(bool(*f)(T, T) = judge_repeat, bool(*ff)(T, T) = compare);
 	set(set& a, bool(*f)(T, T) = judge_repeat, bool(*ff)(T, T) = compare);
 	~set();
 	void insert(T val);
+	void erase(T val);
 	bool empty();
 	int size();
 	void clear();
 	void operator=(set& a);
-	void show(void(*f)(T) = Show);
-	void merge(set& a);
+	void show(void(*f)(T) = Show);	
 };
 
 template<class T>
@@ -278,6 +280,62 @@ void set<T>::insert(T val)
 }
 
 template<class T>
+void set<T>::erase(T val)
+{
+	Data* p = head;
+	while (p)
+	{
+		if (repeat(p->data, val))
+		{
+			if (p->ahead == NULL)
+			{
+				pop_front();
+			}
+			else if (p->next == NULL)
+			{
+				pop_back();
+			}
+			else
+			{
+				Data* p1 = p;
+				p = p->ahead;
+				p->next = p1->next;
+				p1->next->ahead = p;
+				delete p1;
+				length--;
+			}
+			return;
+		}
+		if (!cmp(p->data, val))
+		{
+			return;
+		}
+	}
+}
+
+template<class T>
+void set<T>::erase(Data* p)
+{
+	if (p->ahead == NULL)
+	{
+		pop_front();
+	}
+	else if (p->next == NULL)
+	{
+		pop_back();
+	}
+	else
+	{
+		Data* p1 = p;
+		p = p->ahead;
+		p->next = p1->next;
+		p1->next->ahead = p;
+		delete p1;
+		length--;
+	}
+}
+
+template<class T>
 bool set<T>::empty()
 {
 	return length == 0 ? true : false;
@@ -314,27 +372,3 @@ void set<T>::operator=(set& a)
 	}
 }
 
-template<class T>
-void set<T>::merge(set& a)
-{
-	Data* p1 = head;
-	Data* p2 = a.head;
-	while (p1&&p2)
-	{
-		if (repeat(p1->data, p2->data))
-		{
-			p2 = p2->next;
-			continue;
-		}
-		if (!cmp(p1->data, p2->data))
-		{
-			insert(p1, p2->data);
-			p2 = p2->next;
-		}
-	}
-	while (p2)
-	{
-		push_back(p2->data);
-		p2 = p2->next;
-	}
-}
