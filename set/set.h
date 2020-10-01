@@ -24,7 +24,7 @@ private:
 
 	//比较a和b的大小，如果a<=b返回true，反之返回false
 	static bool compare(T a, T b);
-
+	//指向set需要的比较大小的函数
 	bool(*cmp)(T a, T b);
 
 	//比较a和b元素是否相同，相同返回true，反之返回false
@@ -33,32 +33,51 @@ private:
 	//集合具有互异性，因此需要函数来比较集合中的元素是否相同，该函数指针就是指向用来判断元素是否相同的函数
 	bool(*repeat)(T a, T b);
 
+	//内置输出函数
 	static void Show(T a);
+
 	//用来交换a和b的数据
 	void swap(Data& a, Data& b);
 
+	//在链表头部添加数据a
 	bool push_front(T a);
 
+	//在链表尾部添加数据a
 	bool push_back(T a);
 
+	//删除第一个结点
 	bool pop_front();
 
+	//删除最后一个结点
 	bool pop_back();
 
+	//在p结点处插入数据val
 	void insert(Data* p, T val);
 
+	//删除p结点
 	void erase(Data* p);
 
 public:
+	//构造函数，函数指针f指向判断是否两个元素是否相等的函数，函数指针ff指向比较大小的函数
 	set(bool(*f)(T, T) = judge_repeat, bool(*ff)(T, T) = compare);
-	set(set& a, bool(*f)(T, T) = judge_repeat, bool(*ff)(T, T) = compare);
+	//构造函数,将集合a复制到当前集合中，后面两个参数同上
+	set(set& a);
+	//析构函数（没啥好讲的）
 	~set();
+	//插入数据val
 	void insert(T val);
+	//删除数据val
 	void erase(T val);
+	//判断集合是否为空，如果是返回true，反之返回false
 	bool empty();
+	//返回集合中有多少个数据
 	int size();
+	//清空集合中的数据
 	void clear();
-	void operator=(set& a);
+	//对=的重载
+	void operator=(const set& a);
+	//输出集合中的使用元素
+	set operator-(const set& a);
 	void show(void(*f)(T) = Show);	
 };
 
@@ -108,12 +127,12 @@ set<T>::set(bool(*f)(T, T), bool(*ff)(T, T))
 }
 
 template<class T>
-set<T>::set(set& a, bool(*f)(T, T), bool(*ff)(T, T))
+set<T>::set(set& a)
 {
 	head = rear = NULL;
 	length = 0;
-	repeat = f;
-	cmp = ff;
+	repeat = a.repeat;
+	cmp = a.cmp;
 	Data* p = a.head;
 	while (p)
 	{
@@ -361,7 +380,7 @@ void set<T>::clear()
 }
 
 template<class T>
-void set<T>::operator=(set& a)
+void set<T>::operator=(const set& a)
 {
 	clear();
 	Data* p = a.head;
@@ -372,3 +391,34 @@ void set<T>::operator=(set& a)
 	}
 }
 
+template<class T>
+set<T> set<T>::operator-(const set& a)
+{
+	set<T>s(a.repeat,a.cmp);
+	Data* p1 = head;
+	Data* p2 = a.head;
+	while (p1&&p2)
+	{
+		if (repeat(p1->data, p2->data))
+		{
+			p1 = p1->next;
+			p2 = p2->next;
+			continue;
+		}
+		if (cmp(p1->data, p2->data))
+		{
+			s.push_back(p1->data);
+			p1 = p1->next;
+		}
+		else
+		{
+			p2 = p2->next;
+		}
+	}
+	while (p1)
+	{
+		s.push_back(p1->data);
+		p1 = p1->next;
+	}
+	return s;
+}
