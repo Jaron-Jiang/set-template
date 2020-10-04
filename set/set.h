@@ -33,6 +33,9 @@ private:
 	//集合具有互异性，因此需要函数来比较集合中的元素是否相同，该函数指针就是指向用来判断元素是否相同的函数
 	bool(*repeat)(T a, T b);
 
+	//指向对输入集合进行禁止的函数，如果指向NULL，表示对输入内容无要求
+	bool(*ban)(T a);
+
 	//内置输出函数
 	static void Show(T a);
 
@@ -58,9 +61,9 @@ private:
 	void erase(Data* p);
 
 public:
-	//构造函数，函数指针f指向判断是否两个元素是否相等的函数，函数指针ff指向比较大小的函数
-	set(bool(*f)(T, T) = judge_repeat, bool(*ff)(T, T) = compare);
-	//构造函数,将集合a复制到当前集合中，后面两个参数同上
+	//构造函数，f指向判断元素是否重复的函数，ff指向比较元素大小的函数，fff指向判断不可加入的元素的判断
+	set(bool(*f)(T, T), bool(*ff)(T, T),bool(*fff)(T));
+	//构造函数,将集合a复制到当前集合中
 	set(set& a);
 	//析构函数（没啥好讲的）
 	~set();
@@ -78,6 +81,7 @@ public:
 	void operator=(const set& a);
 	//输出集合中的使用元素
 	set operator-(const set& a);
+	//f指向输出元素的函数
 	void show(void(*f)(T) = Show);	
 };
 
@@ -118,10 +122,25 @@ void set<T>::show(void(*f)(T))
 }
 
 template<class T>
-set<T>::set(bool(*f)(T, T), bool(*ff)(T, T))
+set<T>::set(bool(*f)(T, T), bool(*ff)(T, T),bool(*fff)(T))
 {
-	repeat = f;
-	cmp = ff;
+	if (f == NULL)
+	{
+		repeat = judge_repeat;
+	}
+	else
+	{
+		repeat = f;
+	}
+	if (ff == NULL)
+	{
+		cmp = compare;
+	}
+	else
+	{
+		cmp = ff;
+	}
+	ban = fff;
 	head = rear = NULL;
 	length = 0;
 }
@@ -133,6 +152,7 @@ set<T>::set(set& a)
 	length = 0;
 	repeat = a.repeat;
 	cmp = a.cmp;
+	ban = a.ban;
 	Data* p = a.head;
 	while (p)
 	{
@@ -281,6 +301,11 @@ void set<T>::insert(Data* p, T val)
 template<class T>
 void set<T>::insert(T val)
 {
+	if (ban)
+	{
+		if (!ban(val))
+			return;
+	}
 	Data* p = head;
 	while (p)
 	{
@@ -394,7 +419,7 @@ void set<T>::operator=(const set& a)
 template<class T>
 set<T> set<T>::operator-(const set& a)
 {
-	set<T>s(a.repeat,a.cmp);
+	set<T>s(a.repeat,a.cmp,a.ban);
 	Data* p1 = head;
 	Data* p2 = a.head;
 	while (p1&&p2)
