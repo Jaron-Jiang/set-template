@@ -98,8 +98,10 @@ public:
 	//对()的重载
 	const set operator[](const set& a)const;
 
+	//对^的重载
 	const set operator^(const set& a)const;
 
+	//对+的重载
 	const set operator+(const set& a)const;
 
 	//f指向输出元素的函数
