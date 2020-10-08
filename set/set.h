@@ -74,6 +74,9 @@ public:
 	//析构函数（没啥好讲的）
 	~set();
 
+	//改变集合指向禁止输入的函数
+	void add(bool(*Ban)(T));
+
 	//插入数据val
 	void insert(T val);
 
@@ -112,6 +115,12 @@ template<class T>
 bool set<T>::compare(T a, T b)
 {
 	return memcmp(&a, &b, sizeof(T)) <= 0;
+}
+
+template<class T>
+void set<T>::add(bool(*Ban)(T))
+{
+	ban = Ban;
 }
 
 template<class T>
