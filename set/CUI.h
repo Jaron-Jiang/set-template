@@ -29,15 +29,26 @@ private:
 	void analysis_double();
 	void analysis_char();
 	set<T> analysis_com(int& index, int L,char command[100],bool& flag,int count = 1);
+	bool(*ban)(T val);
 public:
 	void run();
 	CUI();
+	CUI(bool(*Ban)(T));
 	~CUI();
 };
 
 template<class T>
 CUI<T>::CUI()
 {
+	length = 0;
+	rear = head = NULL;
+	ban = NULL;
+}
+
+template<class T>
+CUI<T>::CUI(bool(*Ban)(T))
+{
+	ban = Ban;
 	length = 0;
 	rear = head = NULL;
 }
@@ -81,6 +92,7 @@ void CUI<T>::push_back(char command[100])
 {
 	Data* p = new Data;
 	p->next = NULL;
+	p->s.add(ban);
 	strcpy_s(p->name, command);
 	if (length == 0)
 	{
@@ -162,13 +174,13 @@ void CUI<T>::analysis_int()
 			}
 			else if(ch == ' ')
 			{
-				sum = num;
+				sum = (T)num;
 				p->s.insert(sum);
 				num = 0;
 			}
 			else if (ch == '\n')
 			{
-				sum = num;
+				sum = (T)num;
 				p->s.insert(sum);
 				break;
 			}
