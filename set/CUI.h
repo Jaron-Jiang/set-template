@@ -30,6 +30,7 @@ private:
 	void analysis_char();
 	set<T> analysis_com(int& index, int L,char command[100],bool& flag,int count = 1);
 	bool(*ban)(T val);
+	bool judge(int index, char command[100]);
 public:
 	void run();
 	CUI();
@@ -490,7 +491,10 @@ set<T> CUI<T>::analysis_com(int& index, int L,char command[100],bool& flag,int c
 			{
 				flag = true;
 			}
-			break;
+			if (judge(index - 1, command) && count != 1)
+			{
+				break;
+			}
 		}
 		else if (command[index] == '(')
 		{
@@ -531,6 +535,26 @@ set<T> CUI<T>::analysis_com(int& index, int L,char command[100],bool& flag,int c
 	return s;
 }
 
+template<class T>
+bool CUI<T>::judge(int index, char command[100])
+{
+	while (index >= 0)
+	{
+		if (command[index] == '[')
+		{
+			return false;
+		}
+		else if (command[index] == '+' || command[index] == '-' || command[index] == '^')
+		{
+			break;
+		}
+		else
+		{
+			index--;
+		}
+	}
+	return true;
+}
 template<class T>
 void CUI<T>::run()
 {
