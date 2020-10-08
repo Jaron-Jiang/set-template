@@ -634,29 +634,35 @@ void CUI<T>::run()
 				char str[100];
 				bool flag = false;
 				int k = i - 1;
+				int z = 0;
 				while (k >= 0 && command[k] == ' ')
 				{
 					k--;
 				}
-				if (k < 0)
+				while (z < L&&command[z] == ' ')
+				{
+					z++;
+				}
+				if (k < 0 || z > k)
 				{
 					break;
 				}
-				for (int j = 0; j <= k; j++)
+				int j = 0;
+				while (z <= k)
 				{
-					if (!('a' <= command[j] && command[j] <= 'z') && !('A' <= command[j] && command[j] <= 'Z'))
+					if (!('a' <= command[z] && command[z] <= 'z') && !('A' <= command[z] && command[z] <= 'Z'))
 					{
 						printf("ComError\n");
 						flag = true;
 						break;
 					}
-					str[j] = command[j];
+					str[j++] = command[z++];
 				}
 				if (flag)
 				{
 					break;
 				}
-				str[i] = '\0';
+				str[j] = '\0';
 				Data* p = find(str);
 				flag = false;
 				k = i + 1;
@@ -734,6 +740,59 @@ void CUI<T>::run()
 			instruction a;
 			a.run();
 
+		}
+		else if (strcmp(command, "find") == 0)
+		{
+			std::cin >> command;
+			Data* p = find(command);
+			if (p)
+			{
+				T val;
+				std::cin >> val;
+				if (p->s.find(val))
+				{
+					std::cout << "True" << std::endl;
+				}
+				else
+				{
+					std::cout << "False" << std::endl;
+				}
+			}
+			else
+			{
+				printf("NameError: set '%s' is not defined\n", command);
+				std::cin.ignore(1024, '\n');
+			}
+		}
+		else if (strcmp(command, "subset") == 0)
+		{
+			std::cin >> command;
+			Data* p1 = find(command);
+			if (p1)
+			{
+				std::cin >> command;
+				Data* p2 = find(command);
+				if (p2)
+				{
+					if (p1->s.judge_subset(p2->s))
+					{
+						std::cout << "True" << std::endl;
+					}
+					else
+					{
+						std::cout << "False" << std::endl;
+					}
+				}
+				else
+				{
+					printf("NameError: set '%s' is not defined\n", command);
+				}
+			}
+			else
+			{
+				printf("NameError: set '%s' is not defined\n", command);
+				std::cin.ignore(1024, '\n');
+			}
 		}
 		else
 		{
