@@ -3,6 +3,7 @@
 #include<cstdio>
 #include<iostream>
 #include <typeinfo>
+#include"instruction.h"
 
 template<class T>
 class CUI
@@ -548,6 +549,7 @@ void CUI<T>::run()
 				p = head;
 				while (p)
 				{
+					std::cout << p->name << "\t";
 					p->s.show();
 					p = p->next;
 				}
@@ -709,6 +711,12 @@ void CUI<T>::run()
 			{
 				printf("NameError: set '%s' is not defined\n", command);
 			}
+		}
+		else if (strcmp(command, "help") == 0)
+		{
+			instruction a;
+			a.run();
+
 		}
 		else
 		{
