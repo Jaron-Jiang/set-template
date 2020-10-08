@@ -92,6 +92,11 @@ public:
 	//清空集合中的数据
 	void clean();
 
+	//查看集合中是否存在元素val
+	bool find(T val);
+
+	bool judge_subset(const set& a);
+
 	//对=的重载
 	const void operator=(const set& a);
 
@@ -144,6 +149,11 @@ void set<T>::Show(T a)
 template<class T>
 void set<T>::show(void(*SHOW)(T))
 {
+	if (length == 0)
+	{
+		std::cout << "NULL" << std::endl;
+		return;
+	}
 	Data* p = head;
 	while (p)
 	{
@@ -450,6 +460,51 @@ void set<T>::clean()
 		p = head;
 		length--;
 	}
+}
+
+template<class T>
+bool set<T>::find(T val)
+{
+	Data* p = head;
+	bool flag = false;
+	for (p = head; p != NULL; p = p->next)
+	{
+		if (repeat(p->data, val))
+		{
+			flag = true;
+			break;
+		}
+	}
+	if (flag == false)
+	{
+		return false;
+	}
+	return true;
+}
+
+template<class T>
+bool set<T>::judge_subset(const set& a)
+{
+	Data* p1 = head;
+	Data* p2 = a.head;
+	while (p1&&p2)
+	{
+		if (repeat(p1->data, p2->data))
+		{
+			p1 = p1->next;
+			p2 = p2->next;
+			continue;
+		}
+		if (cmp(p1->data, p2->data))
+		{
+			break;
+		}
+		else
+		{
+			p2 = p2->next;
+		}
+	}
+	return p1 ? false : true;
 }
 
 template<class T>
