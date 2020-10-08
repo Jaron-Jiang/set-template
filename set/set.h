@@ -24,6 +24,7 @@ private:
 
 	//比较a和b的大小，如果a<=b返回true，反之返回false
 	static bool compare(T a, T b);
+
 	//指向set需要的比较大小的函数
 	bool(*cmp)(T a, T b);
 
@@ -43,10 +44,10 @@ private:
 	void swap(Data& a, Data& b);
 
 	//在链表头部添加数据a
-	bool push_front(T a);
+	bool push_front(T& a);
 
 	//在链表尾部添加数据a
-	bool push_back(T a);
+	bool push_back(T& a);
 
 	//删除第一个结点
 	bool pop_front();
@@ -55,52 +56,72 @@ private:
 	bool pop_back();
 
 	//在p结点处插入数据val
-	void insert(Data* p, T val);
+	void insert(Data* p, T& val);
 
 	//删除p结点
 	void erase(Data* p);
 
+	//寻找结点p及以后是否存在元素val，如果存在返回指向其的指针，如果不存在则返回NULL
+	Data* find(Data* p, T& val);
+
 public:
 	//构造函数，f指向判断元素是否重复的函数，ff指向比较元素大小的函数，fff指向判断不可加入的元素的判断
-	set(bool(*f)(T, T), bool(*ff)(T, T),bool(*fff)(T));
+	set(bool(*Repeat)(T, T) = judge_repeat, bool(*Compare)(T, T) = compare,bool(*Ban)(T) = NULL);
+
 	//构造函数,将集合a复制到当前集合中
 	set(set& a);
+
 	//析构函数（没啥好讲的）
 	~set();
+
 	//插入数据val
 	void insert(T val);
+
 	//删除数据val
-	void erase(T val);
+	bool erase(T val);
+
 	//判断集合是否为空，如果是返回true，反之返回false
 	bool empty();
+
 	//返回集合中有多少个数据
 	int size();
+
 	//清空集合中的数据
-	void clear();
+	void clean();
+
 	//对=的重载
-	void operator=(const set& a);
-	//输出集合中的使用元素
-	set operator-(const set& a);
+	const void operator=(const set& a);
+
+	//对-的重载
+	const set operator-(const set& a)const;
+
+	//对()的重载
+	const set operator[](const set& a)const;
+
+	const set operator^(const set& a)const;
+
+	const set operator+(const set& a)const;
+
 	//f指向输出元素的函数
-	void show(void(*f)(T) = Show);	
+	void show(void(*SHOW)(T) = Show);	
 };
 
 template<class T>
 bool set<T>::compare(T a, T b)
 {
-	return a <= b;
+	return memcmp(&a, &b, sizeof(T)) <= 0;
 }
 
 template<class T>
 set<T>::~set()
 {
-	clear();
+	clean();
 }
 
 template<class T>
 bool set<T>::judge_repeat(T a, T b)
 {
-	return a == b ? true : false;
+	return memcmp(&a, &b, sizeof(T)) == 0;
 }
 
 template<class T>
@@ -110,37 +131,23 @@ void set<T>::Show(T a)
 }
 
 template<class T>
-void set<T>::show(void(*f)(T))
+void set<T>::show(void(*SHOW)(T))
 {
 	Data* p = head;
 	while (p)
 	{
-		f(p->data);
+		SHOW(p->data);
 		p = p->next;
 	}
 	std::cout << std::endl;
 }
 
 template<class T>
-set<T>::set(bool(*f)(T, T), bool(*ff)(T, T),bool(*fff)(T))
+set<T>::set(bool(*Repeat)(T, T), bool(*Compare)(T, T),bool(*Ban)(T))
 {
-	if (f == NULL)
-	{
-		repeat = judge_repeat;
-	}
-	else
-	{
-		repeat = f;
-	}
-	if (ff == NULL)
-	{
-		cmp = compare;
-	}
-	else
-	{
-		cmp = ff;
-	}
-	ban = fff;
+	repeat = Repeat;
+	cmp = Compare;
+	ban = Ban;
 	head = rear = NULL;
 	length = 0;
 }
@@ -170,7 +177,7 @@ void set<T>::swap(Data& a, Data& b)
 }
 
 template<class T>
-bool set<T>::push_front(T a)
+bool set<T>::push_front(T& a)
 {
 	try
 	{
@@ -197,7 +204,7 @@ bool set<T>::push_front(T a)
 }
 
 template<class T>
-bool set<T>::push_back(T a)
+bool set<T>::push_back(T& a)
 {
 	try
 	{
@@ -280,7 +287,7 @@ bool set<T>::pop_back()
 }
 
 template<class T>
-void set<T>::insert(Data* p, T val)
+void set<T>::insert(Data* p, T& val)
 {
 	if (p->ahead == NULL)
 	{
@@ -324,7 +331,7 @@ void set<T>::insert(T val)
 }
 
 template<class T>
-void set<T>::erase(T val)
+bool set<T>::erase(T val)
 {
 	Data* p = head;
 	while (p)
@@ -348,13 +355,15 @@ void set<T>::erase(T val)
 				delete p1;
 				length--;
 			}
-			return;
+			return true;
 		}
 		if (!cmp(p->data, val))
 		{
-			return;
+			return false;
 		}
+		p = p->next;
 	}
+	return false;
 }
 
 template<class T>
@@ -380,6 +389,20 @@ void set<T>::erase(Data* p)
 }
 
 template<class T>
+typename set<T>::Data* set<T>::find(Data* p, T& val)
+{
+	while (p)
+	{
+		if (repeat(p->data, val))
+		{
+			break;
+		}
+		p = p->next;
+	}
+	return p;
+}
+
+template<class T>
 bool set<T>::empty()
 {
 	return length == 0 ? true : false;
@@ -392,7 +415,7 @@ int set<T>::size()
 }
 
 template<class T>
-void set<T>::clear()
+void set<T>::clean()
 {
 	Data* p = head;
 	while (head)
@@ -405,9 +428,9 @@ void set<T>::clear()
 }
 
 template<class T>
-void set<T>::operator=(const set& a)
+const void set<T>::operator=(const set& a)
 {
-	clear();
+	clean();
 	Data* p = a.head;
 	while (p)
 	{
@@ -417,7 +440,7 @@ void set<T>::operator=(const set& a)
 }
 
 template<class T>
-set<T> set<T>::operator-(const set& a)
+const set<T> set<T>::operator-(const set& a)const
 {
 	set<T>s(a.repeat,a.cmp,a.ban);
 	Data* p1 = head;
@@ -444,6 +467,97 @@ set<T> set<T>::operator-(const set& a)
 	{
 		s.push_back(p1->data);
 		p1 = p1->next;
+	}
+	return s;
+}
+
+template<class T>
+const set<T> set<T>::operator[](const set& a)const
+{
+	set<T>s(repeat, cmp, ban);
+	Data* p1 = a.head;
+	Data* p2 = head;
+	while (p1&&p2)
+	{
+		if (repeat(p1->data, p2->data))
+		{
+			p1 = p1->next;
+			continue;
+		}
+		if (cmp(p1->data, p2->data))
+		{
+			s.push_back(p1->data);
+			p1 = p1->next;
+		}
+		else
+		{
+			p2 = p2->next;
+		}
+	}
+	while(p1)
+	{
+		s.push_back(p1->data);
+		p1 = p1->next;
+	}
+	return s;
+}\
+
+template<class T>
+const set<T> set<T>::operator^(const set& a) const
+{
+	set<T>s(repeat, cmp, ban);
+	Data* p1 = head;
+	Data* p2 = a.head;
+	while (p1&&p2)
+	{
+		if (repeat(p1->data, p2->data))
+		{
+			s.push_back(p1->data);
+			p1 = p1->next;
+			p2 = p2->next;
+			continue;
+		}
+		if (cmp(p1->data, p2->data))
+		{
+			p1 = p1->next;
+		}
+		else
+		{
+			p2 = p2->next;
+		}
+	}
+	return s;
+}
+
+template<class T>
+const set<T>  set<T>::operator+(const set& a) const
+{
+	set<T>s;
+	s = a;
+	Data* p1 = s.head;
+	Data* p2 = head;
+	while (p1&&p2)
+	{
+		if (repeat(p1->data, p2->data))
+		{
+			p1 = p1->next;
+			p2 = p2->next;
+			continue;
+		}
+		if (cmp(p1->data, p2->data))
+		{
+			p1 = p1->next;
+		}
+		else
+		{
+			s.insert(p1,p2->data);
+			p2 = p2->next;
+		}
+	}
+	while (p2)
+	{
+		s.push_back(p2->data);
+		p2 = p2->next;
 	}
 	return s;
 }
