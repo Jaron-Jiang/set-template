@@ -66,7 +66,7 @@ private:
 
 public:
 	//构造函数，f指向判断元素是否重复的函数，ff指向比较元素大小的函数，fff指向判断不可加入的元素的判断
-	set(bool(*Repeat)(T, T) = judge_repeat, bool(*Compare)(T, T) = compare,bool(*Ban)(T) = NULL);
+	set(bool(*Repeat)(T, T) = NULL, bool(*Compare)(T, T) = NULL,bool(*Ban)(T) = NULL);
 
 	//构造函数,将集合a复制到当前集合中
 	set(set& a);
@@ -145,8 +145,22 @@ void set<T>::show(void(*SHOW)(T))
 template<class T>
 set<T>::set(bool(*Repeat)(T, T), bool(*Compare)(T, T),bool(*Ban)(T))
 {
-	repeat = Repeat;
-	cmp = Compare;
+	if (Repeat)
+	{
+		repeat = Repeat;
+	}
+	else
+	{
+		repeat = judge_repeat;
+	}
+	if (Compare)
+	{
+		cmp = Compare;
+	}
+	else
+	{
+		cmp = compare;
+	}
 	ban = Ban;
 	head = rear = NULL;
 	length = 0;
