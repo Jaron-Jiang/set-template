@@ -522,6 +522,11 @@ set<T> CUI<T>::analysis_com(int& index, int L,char command[100],bool& flag,int c
 		{
 			index++;
 		}
+		else
+		{
+			flag = true;
+			break;
+		}
 	}
 	return s;
 }

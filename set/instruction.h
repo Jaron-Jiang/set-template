@@ -7,6 +7,7 @@ private:
 	void _assign();
 	void _show();
 	void _erase();
+	void _size();
 	void _quit();
 	void _com();
 	void _insert();
@@ -31,6 +32,10 @@ void instruction::_show()
 void instruction::_erase()
 {
 	printf("使用方法:\n\t输入erase name val，删除集合name中的元素val\n\t注意:这里的name为集合变量名，此外一次只能删除一个元素\n");
+}
+void instruction::_size()
+{
+	printf("使用方法:\n\t输入size name，显示集合name的元素个数\n");
 }
 void instruction::_quit()
 {
@@ -70,6 +75,8 @@ void instruction::run()
 		_show();
 		printf("\nerase:\n\n");
 		_erase();
+		printf("\nsize:\n\n");
+		_size();
 		printf("\nquit:\n\n");
 		_quit();
 		printf("\ncom:\n\n");
@@ -100,6 +107,14 @@ void instruction::run()
 	else if (strcmp(command, "-com") == 0)
 	{
 		_com();
+	}
+	else if (strcmp(command, "-erase") == 0)
+	{
+		_erase();
+	}
+	else if (strcmp(command, "-size") == 0)
+	{
+		_size();
 	}
 	else if (strcmp(command, "-insert") == 0)
 	{

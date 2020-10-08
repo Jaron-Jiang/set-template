@@ -106,7 +106,6 @@ void fun1()
 }
 int main()
 {
-	system("color F0");
 	fun();
 	_getch();
 	system("cls");

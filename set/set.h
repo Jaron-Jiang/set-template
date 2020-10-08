@@ -114,7 +114,7 @@ public:
 template<class T>
 bool set<T>::compare(T a, T b)
 {
-	return memcmp(&a, &b, sizeof(T)) <= 0;
+	return a <= b;
 }
 
 template<class T>
