@@ -424,15 +424,18 @@ set<T> CUI<T>::analysis_com(int& index, int L,char command[100],bool& flag,int c
 		{
 			if (count != 1)
 			{
-				name[i] = '\0';
-				Data* p = find(name);
-				if (p)
+				if (i)
 				{
-					s = p->s;
-				}
-				else
-				{
-					flag = true;
+					name[i] = '\0';
+					Data* p = find(name);
+					if (p)
+					{
+						s = p->s;
+					}
+					else
+					{
+						flag = true;
+					}
 				}
 				break;
 			}
@@ -485,7 +488,8 @@ set<T> CUI<T>::analysis_com(int& index, int L,char command[100],bool& flag,int c
 			Data* p = find(name);
 			if (p)
 			{
-				s = s + p->s[analysis_com(++index, L, command, flag, 1)];					
+				s = s + p->s[analysis_com(++index, L, command, flag, 1)];	
+				index++;
 			}
 			else
 			{
@@ -499,6 +503,7 @@ set<T> CUI<T>::analysis_com(int& index, int L,char command[100],bool& flag,int c
 		else if (command[index] == '(')
 		{
 			s = s + analysis_com(++index, L, command, flag, 1);
+			index++;
 			if (count != 1)
 			{
 				break;
@@ -519,7 +524,6 @@ set<T> CUI<T>::analysis_com(int& index, int L,char command[100],bool& flag,int c
 					flag = true;
 				}
 			}
-			index++;
 			break;
 		}
 		else if (command[index] == ' ')
