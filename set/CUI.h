@@ -32,7 +32,7 @@ private:
 	bool(*ban)(T val);
 	bool judge(int index, char command[100]);
 public:
-	void run();
+	int run();
 	CUI();
 	CUI(bool(*Ban)(T));
 	~CUI();
@@ -560,10 +560,11 @@ bool CUI<T>::judge(int index, char command[100])
 	return true;
 }
 template<class T>
-void CUI<T>::run()
+int CUI<T>::run()
 {
 	char command[100];
 	bool flag = true;
+	bool is_back = false;
 	while (flag)
 	{
 		std::cout << ">>>>";
@@ -822,10 +823,16 @@ void CUI<T>::run()
 				std::cin.ignore(1024, '\n');
 			}
 		}
+		else if (strcmp(command, "back()") == 0)
+		{
+			flag = false;
+			is_back = true;
+		}
 		else
 		{
 			printf("NameError: name '%s' is not defined\n",command);
 			std::cin.ignore(1024, '\n');
 		}
 	}
+	return is_back;
 }

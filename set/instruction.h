@@ -15,6 +15,7 @@ private:
 	void _delete();
 	void _find();
 	void _subset();
+	void _back();
 public:
 	void run();
 };
@@ -83,6 +84,11 @@ void instruction::_subset()
 	printf("使用方法:\n\t输入subset name1 name2,查看集合name1是否是name2的子集，是输出True，不是输出False\n");
 }
 
+void instruction::_back()
+{
+	printf("使用方法:\n\t输入back(),返回上一个界面\n");
+}
+
 void instruction::run()
 {
 	char command[100];
@@ -113,6 +119,8 @@ void instruction::run()
 		_find();
 		printf("\nsubset:\n\n");
 		_subset();
+		printf("\nback:\n\n");
+		_back();
 	}
 	else if(strcmp(command, "-clean") == 0)
 	{
@@ -161,6 +169,10 @@ void instruction::run()
 	else if (strcmp(command, "-subset") == 0)
 	{
 		_subset();
+	}
+	else if (strcmp(command, "-back") == 0)
+	{
+		_back();
 	}
 	else 
 	{

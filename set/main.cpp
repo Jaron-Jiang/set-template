@@ -4,12 +4,15 @@
 #include"set.h"
 #include"CUI.h"
 #include <windows.h>
-#define x1 10
-#define y1 45
-#define x2 11
+#define x1 45
+#define y1 10
 #define y2 67
-
-
+bool ban(char val)
+{
+	if ('a' <= val && val <= 'z')
+		return true;
+	return false;
+}
 class Object
 {
 private:
@@ -19,6 +22,7 @@ private:
 			return true;
 		return false;
 	}
+
 	void first()
 	{
 		for (int i = 1; i <= 120; i++)
@@ -42,13 +46,13 @@ private:
 		print(str);
 		str = "-clean       -assign       -show  ";
 		print(str);
-		str = "-erase       -size         -quit()";
+		str = "-erase       -size         -quit  ";
 		print(str);
 		str = "-com         -insert       -ls    ";
 		print(str);
 		str = "-delete      -help         -find  ";
 		print(str);
-		str = "-subset                           ";
+		str = "-subset      -back                ";
 		print(str);
 		std::cout << std::endl << std::endl;
 		str = "操作命令的使用";
@@ -67,6 +71,7 @@ private:
 		std::cout << std::endl;
 
 	}
+
 	void second()
 	{
 		for (int i = 1; i <= 9; i++)
@@ -79,7 +84,10 @@ private:
 		print(str);
 		str = "3. double             4. char ";
 		print(str);
+		str = "5. back               6. exit ";
+		print(str);
 	}
+
 	void print(std::string str)
 	{
 		int L = (120 - str.size()) / 2;
@@ -89,6 +97,7 @@ private:
 		}
 		std::cout << str << std::endl;
 	}
+
 	void change(int& x,int& y)
 	{
 		int ch;
@@ -96,8 +105,9 @@ private:
 		HANDLE   hCon;//定义一个句柄 
 		hCon = GetStdHandle(STD_OUTPUT_HANDLE);   //获得输出设备的句柄 
 		COORD   setps; //定义结构体变量 
-		setps.X = y1;
-		setps.Y = x1;
+		setps.X = x1;
+		setps.Y = y1;
+		int xx = 0, yy = 0;
 		while (flag)
 		{
 			SetConsoleCursorPosition(hCon, setps);
@@ -108,73 +118,108 @@ private:
 				flag = false;
 				break;
 			case 72:
-				setps.Y = (setps.Y == x1 ? x2 : x1);
+				yy = (yy + 2) % 3;
+				setps.Y = y1 + yy;
 				break;
 			case 80:
-				setps.Y = (setps.Y == x1 ? x2 : x1);
+				yy = (yy + 1) % 3;
+				setps.Y = y1 + yy;
 				break;
 			case 75:
-				setps.X = (setps.X == y1 ? y2 : y1);
+				xx = (xx + 22) % 44;
+				setps.X = x1 + xx;
 				break;
 			case 77:
-				setps.X = (setps.X == y1 ? y2 : y1);
+				xx = (xx + 22) %44;
+				setps.X = x1 + xx;
 				break;
 			case 49:
-				setps.Y = x1;
-				setps.X = y1;
+				setps.Y = y1;
+				setps.X = x1;
 				flag = false;
 				break;
 			case 50:
-				setps.Y = x1;
-				setps.X = y2;
+				setps.Y = y1;
+				setps.X = x1+22;
 				flag = false;
 				break;
 			case 51:
-				setps.Y = x2;
-				setps.X = y1;
+				setps.Y = y1+1;
+				setps.X = x1;
 				flag = false;
 				break;
 			case 52:
-				setps.Y = x2;
-				setps.X = y2;
+				setps.Y = y1+1;
+				setps.X = x1+22;
+				flag = false;
+				break;
+			case 53:
+				setps.Y = y1 + 2;
+				setps.X = x1;
+				flag = false;
+				break;
+			case 54:
+				setps.Y = y1 + 2;
+				setps.X = x1 + 22;
 				flag = false;
 				break;
 			default:
 				break;
 			}
 		}
-		x = setps.Y;
-		y = setps.X;
+		y = setps.Y;
+		x = setps.X;
 	}
+
 public:
 	void run()
 	{
-		first();
-		_getch();
-		system("cls");
-		second();
-		int x = 0, y  = 0;
-		change(x, y);
-		system("cls");
-		if (x == x1 && y == y1)
+		bool one = true;
+		bool flag = true;
+		while (flag)
 		{
-			CUI<int>a;
-			a.run();
-		}
-		else if (x == x1 && y == y2)
-		{
-			CUI<float>a;
-			a.run();
-		}
-		else if (x == x2 && y == y1)
-		{
-			CUI<double>a;
-			a.run();
-		}
-		else if (x == x2 && y == y2)
-		{
-			CUI<char>a(ban);
-			a.run();
+			if (one)
+			{
+				first();
+				getchar();
+			}
+			system("cls");
+			second();
+			int x = 0, y = 0;
+			change(x, y);
+			system("cls");
+			if (x == x1 && y == y1)
+			{
+				CUI<int>a;
+				flag = a.run();
+				one = false;
+			}
+			else if (x == x1 + 22 && y == y1)
+			{
+				CUI<float>a;
+				flag = a.run();
+				one = false;
+			}
+			else if (x == x1 && y == y1 + 1)
+			{
+				CUI<double>a;
+				flag = a.run();
+				one = false;
+			}
+			else if (x == x1 + 22 && y == y1 + 1)
+			{
+				CUI<char>a(ban);
+				flag = a.run();
+				one = false;
+			}
+			else if(x == x1 +22 && y == y1 + 2)
+			{
+				flag = false;
+			}
+			else
+			{
+				one = true;
+			}
 		}
 	}
 };
