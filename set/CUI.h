@@ -556,7 +556,7 @@ int CUI<T>::run()
 	{
 		std::cout << ">>>>";
 		std::cin >> command;
-		if (strcmp(command, "clean") == 0)
+		if (strcmp(command, "clean()") == 0)
 		{
 			clean();
 		}
