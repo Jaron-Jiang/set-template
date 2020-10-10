@@ -4,7 +4,7 @@
 #include<iostream>
 #include <typeinfo>
 #include"instruction.h"
-
+#include <stdlib.h> 
 template<class T>
 class CUI
 {
@@ -218,47 +218,35 @@ void CUI<T>::analysis_float()
 	Data* p = find(command);
 	if (p)
 	{
-		float num = 0;
 		char ch;
 		std::cin.ignore(1024, ' ');
-		float s = 1;
 		T sum;
+		char buf[100];
+		int index = 0;
 		while (true)
 		{
 			ch = getchar();
-			if ('0' <= ch && ch <= '9')
+			if ('0' <= ch && ch <= '9'||ch=='.')
 			{
-				if (s == 1)
-				{
-					num = num * 10 + ch - '0';
-				}
-				else
-				{
-					num += s * (ch - '0');
-					s = (float)(s*0.1);
-				}	
-			}
-			else if (ch == '.')
-			{
-				s = (float)(s*0.1);
+				buf[index++] = ch;
 			}
 			else if (ch == ' ')
 			{
-				sum = (T)num;
+				buf[index] = '\0';
+				sum = strtof(buf, NULL);
 				p->s.insert(sum);
-				num = 0;
-				s = 1;
+				index = 0;
 			}
 			else if (ch == '\n')
 			{
-				sum = (T)num;
+				buf[index] = '\0';
+				sum = strtof(buf, NULL);
 				p->s.insert(sum);
 				break;
 			}
 			else
 			{
-				num = 0;
-				s = 1;
+				index = 0;
 				while (true)
 				{
 					ch = getchar();
@@ -289,40 +277,36 @@ void CUI<T>::analysis_double()
 	Data* p = find(command);
 	if (p)
 	{
-		double num = 0;
+		long long num = 0;
 		char ch;
 		std::cin.ignore(1024, ' ');
-		double s = 1;
+		long long s = -1;
 		T sum;
 		while (true)
 		{
 			ch = getchar();
 			if ('0' <= ch && ch <= '9')
 			{
-				if (s == 1)
+				num = num * 10 + ch - '0';
+				if (s != -1)
 				{
-					num = num * 10 + ch - '0';
-				}
-				else
-				{
-					num += s * (ch - '0');
-					s *= 0.1;
+					s *= 10;
 				}
 			}
 			else if (ch == '.')
 			{
-				s *= 0.1;
+				s = 1;
 			}
 			else if (ch == ' ')
 			{
-				sum = (T)num;
+				sum = (T)(1.0*num/s);
 				p->s.insert(sum);
 				num = 0;
-				s = 1;
+				s = -1;
 			}
 			else if (ch == '\n')
 			{
-				sum = (T)num;
+				sum = (T)(1.0*num/s);
 				p->s.insert(sum);
 				break;
 			}

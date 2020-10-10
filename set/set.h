@@ -144,21 +144,13 @@ bool set<T>::judge_repeat(T a, T b)
 template<class T>
 void set<T>::Show(T a)
 {
-	if (typeid(T) == typeid(int))
+	if (typeid(T) == typeid(char))
 	{
-		printf("%d ",a);
+		std::cout << a;
 	}
-	else if (typeid(T) == typeid(float))
+	else
 	{
-		printf("%.7f ",a);
-	}
-	else if (typeid(T) == typeid(double))
-	{
-		printf("%.15lf ",a);
-	}
-	else if (typeid(T) == typeid(char))
-	{
-		printf("%c",a);
+		std::cout << a << " ";
 	}
 }
 
@@ -596,7 +588,7 @@ const set<T> set<T>::operator[](const set& a)const
 		p1 = p1->next;
 	}
 	return s;
-}\
+}
 
 template<class T>
 const set<T> set<T>::operator^(const set& a) const
