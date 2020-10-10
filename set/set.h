@@ -1,4 +1,5 @@
 #pragma once
+#include <typeinfo>
 
 template<class T>
 class set
@@ -143,7 +144,22 @@ bool set<T>::judge_repeat(T a, T b)
 template<class T>
 void set<T>::Show(T a)
 {
-	std::cout << a << " ";
+	if (typeid(T) == typeid(int))
+	{
+		printf("%d ",a);
+	}
+	else if (typeid(T) == typeid(float))
+	{
+		printf("%.7f ",a);
+	}
+	else if (typeid(T) == typeid(double))
+	{
+		printf("%.15lf ",a);
+	}
+	else if (typeid(T) == typeid(char))
+	{
+		printf("%c",a);
+	}
 }
 
 template<class T>
