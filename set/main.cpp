@@ -13,6 +13,7 @@ bool ban(char val)
 		return true;
 	return false;
 }
+
 class Object
 {
 private:
@@ -181,7 +182,10 @@ public:
 			if (one)
 			{
 				first();
-				getchar();
+				if (_getch() == 27)
+				{
+					break;
+				}
 			}
 			system("cls");
 			second();
@@ -223,6 +227,7 @@ public:
 		}
 	}
 };
+
 struct person
 {
 	double age;
