@@ -235,6 +235,7 @@ void CUI<T>::analysis_float()
 				else
 				{
 					num += s * (ch - '0');
+					s = (float)(s*0.1);
 				}	
 			}
 			else if (ch == '.')
@@ -305,6 +306,7 @@ void CUI<T>::analysis_double()
 				else
 				{
 					num += s * (ch - '0');
+					s *= 0.1;
 				}
 			}
 			else if (ch == '.')
@@ -559,6 +561,7 @@ bool CUI<T>::judge(int index, char command[100])
 	}
 	return true;
 }
+
 template<class T>
 int CUI<T>::run()
 {
