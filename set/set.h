@@ -148,9 +148,17 @@ void set<T>::Show(T a)
 	{
 		std::cout << a;
 	}
-	else
+	else if (typeid(T) == typeid(int))
 	{
-		std::cout << a << " ";
+		printf("%d ", a);
+	}
+	else if (typeid(T) == typeid(float))
+	{
+		printf("%f ",a);
+	}
+	else if (typeid(T) == typeid(double))
+	{
+		printf("%lf ",a);
 	}
 }
 
