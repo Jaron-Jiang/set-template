@@ -6,7 +6,6 @@
 #include <windows.h>
 #define x1 45
 #define y1 10
-#define y2 67
 bool ban(char val)
 {
 	if ('a' <= val && val <= 'z')
@@ -148,11 +147,11 @@ private:
 		}
 		std::string str = "请选择要使用的那种数据类型的集合";
 		print(str);
-		str = "1. int                2. double";
+		str = "1. int               2. double";
 		print(str);
-		str = "3. char               4. string";
+		str = "3. char              4. string";
 		print(str);
-		str = "5. back               6. exit  "; 
+		str = "5. back              6. exit  "; 
 		print(str);
 	}
 
@@ -194,11 +193,11 @@ private:
 				setps.Y = y1 + yy;
 				break;
 			case 75:
-				xx = (xx + 22) % 44;
+				xx = (xx + 21) % 42;
 				setps.X = x1 + xx;
 				break;
 			case 77:
-				xx = (xx + 22) %44;
+				xx = (xx + 21) %42;
 				setps.X = x1 + xx;
 				break;
 			case 49:
@@ -208,7 +207,7 @@ private:
 				break;
 			case 50:
 				setps.Y = y1;
-				setps.X = x1+22;
+				setps.X = x1+21;
 				flag = false;
 				break;
 			case 51:
@@ -218,7 +217,7 @@ private:
 				break;
 			case 52:
 				setps.Y = y1+1;
-				setps.X = x1+22;
+				setps.X = x1+21;
 				flag = false;
 				break;
 			case 53:
@@ -228,7 +227,7 @@ private:
 				break;
 			case 54:
 				setps.Y = y1 + 2;
-				setps.X = x1 + 22;
+				setps.X = x1 + 21;
 				flag = false;
 				break;
 			default:
@@ -266,7 +265,7 @@ public:
 				flag = a.run("int");
 				one = false;
 			}
-			else if (x == x1 + 22 && y == y1)
+			else if (x == x1 + 21 && y == y1)
 			{
 				CUI<std::string>a(repeat,cmp2);
 				flag = a.run("double");
@@ -278,13 +277,13 @@ public:
 				flag = a.run("char");
 				one = false;
 			}
-			else if (x == x1 + 22 && y == y1 + 1)
+			else if (x == x1 + 21 && y == y1 + 1)
 			{
 				CUI<std::string>a(repeat,cmp3);
 				flag = a.run("string");
 				one = false;
 			}
-			else if(x == x1 +22 && y == y1 + 2)
+			else if(x == x1 +21 && y == y1 + 2)
 			{
 				flag = false;
 			}
