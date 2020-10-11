@@ -16,6 +16,7 @@ private:
 		Data* next;
 		Data* ahead;
 	};
+	std::string data_type;
 	int length;
 	Data* head;
 	Data* rear;
@@ -25,31 +26,25 @@ private:
 	void show();
 	void erase(Data* p);
 	void analysis_int();
-	void analysis_float();
 	void analysis_double();
 	void analysis_char();
+	void analysis_string();
 	set<T> analysis_com(int& index, int L,char command[100],bool& flag,int count = 1);
-	bool(*ban)(T val);
+	bool(*repeat)(T a, T b);
+	bool(*cmp)(T a, T b);
 	bool judge(int index, char command[100]);
+	std::string change(std::string str);
 public:
-	int run();
-	CUI();
-	CUI(bool(*Ban)(T));
+	int run(std::string str);
+	CUI(bool(*Repeat)(T,T),bool(*Cmp)(T,T));
 	~CUI();
 };
 
 template<class T>
-CUI<T>::CUI()
+CUI<T>::CUI(bool(*Repeat)(T, T), bool(*Cmp)(T, T))
 {
-	length = 0;
-	rear = head = NULL;
-	ban = NULL;
-}
-
-template<class T>
-CUI<T>::CUI(bool(*Ban)(T))
-{
-	ban = Ban;
+	repeat = Repeat;
+	cmp = Cmp;
 	length = 0;
 	rear = head = NULL;
 }
@@ -93,7 +88,9 @@ void CUI<T>::push_back(char command[100])
 {
 	Data* p = new Data;
 	p->next = NULL;
-	p->s.add(ban);
+	p->s.add1(repeat);
+	p->s.add2(cmp);
+	p->s.add3(NULL);	
 	strcpy_s(p->name, command);
 	if (length == 0)
 	{
@@ -155,6 +152,64 @@ void CUI<T>::erase(Data* p)
 }
 
 template<class T>
+std::string CUI<T>::change(std::string str)
+{
+	int start = 0, end = str.size() - 1;
+	int count = 0;
+	for (int i = 0; i < end; i++)
+	{
+		if (str[i] == '.')
+		{
+			count++;
+		}
+	}
+	if (count > 1)
+	{
+		return "kk";
+	}
+	while (start < end)
+	{
+		if (str[start] != '0'||str[start] == '.')
+		{
+			break;
+		}
+		start++;
+	}
+	while (start < end)
+	{
+		if (str[end] != '0' || str[end] == '.')
+		{
+			break;
+		}
+		end--;
+	}
+	if (start == end)
+	{
+		if (str[end] != '.')
+			return str = str[start];
+		return "0";
+	}
+	else
+	{
+		if (str[start] == '.')
+		{
+			std::string str1(str, start, end - start + 1);
+			return '0' + str1;
+		}
+		else if (str[end] == '.')
+		{
+			std::string str1(str, start, end - start);
+			return str1;
+		}
+		else
+		{
+			std::string str1(str, start, end - start+1);
+			return str1;
+		}
+	}
+}
+
+template<class T>
 void CUI<T>::analysis_int()
 {
 	char command[100];
@@ -162,102 +217,71 @@ void CUI<T>::analysis_int()
 	Data* p = find(command);
 	if (p)
 	{
-		int num = 0;
 		char ch;
 		std::cin.ignore(1024, ' ');
-		T sum;
-		while (true)
+		bool flag = true;
+		bool index;
+		while (flag)
 		{
-			ch = getchar();
-			if ('0' <= ch && ch <= '9')
+			T num;
+			index = true;
+			while (true)
 			{
-				num = num * 10 + ch - '0';
-			}
-			else if(ch == ' ')
-			{
-				sum = (T)num;
-				p->s.insert(sum);
-				num = 0;
-			}
-			else if (ch == '\n')
-			{
-				sum = (T)num;
-				p->s.insert(sum);
-				break;
-			}
-			else
-			{
-				num = 0;
-				while (true)
+				ch = getchar();
+				if ('0' <= ch && ch <= '9')
 				{
-					ch = getchar();
-					if (ch == ' ')
+					if (index)
 					{
-						break;
+						if (ch != '0')
+						{
+							num = ch;
+							index = false;
+						}
 					}
-					else if (ch == '\n')
+					else
 					{
-						return;
-					}
+						num += ch;
+					}					
 				}
-			}
-		}
-	}
-	else
-	{
-		printf("NameError: set '%s' is not defined\n", command);
-		std::cin.ignore(1024, '\n');
-	}
-}
-
-template<class T>
-void CUI<T>::analysis_float()
-{
-	char command[100];
-	std::cin >> command;
-	Data* p = find(command);
-	if (p)
-	{
-		char ch;
-		std::cin.ignore(1024, ' ');
-		T sum;
-		char buf[100];
-		int index = 0;
-		while (true)
-		{
-			ch = getchar();
-			if ('0' <= ch && ch <= '9'||ch=='.')
-			{
-				buf[index++] = ch;
-			}
-			else if (ch == ' ')
-			{
-				buf[index] = '\0';
-				sum = strtof(buf, NULL);
-				p->s.insert(sum);
-				index = 0;
-			}
-			else if (ch == '\n')
-			{
-				buf[index] = '\0';
-				sum = strtof(buf, NULL);
-				p->s.insert(sum);
-				break;
-			}
-			else
-			{
-				index = 0;
-				while (true)
+				else if (ch == ' ')
 				{
-					ch = getchar();
-					if (ch == ' ')
+					if (num.size() == 0)
 					{
-						break;
+						p->s.insert("0");
 					}
-					else if (ch == '\n')
+					else
 					{
-						return;
+						p->s.insert(num);
 					}
+					break;
+				}
+				else if (ch == '\n')
+				{
+					if (num.size() == 0)
+					{
+						p->s.insert("0");
+					}
+					else
+					{
+						p->s.insert(num);
+					}
+					return;
+				}
+				else
+				{
+					while (true)
+					{
+						ch = getchar();
+						if (ch == ' ')
+						{
+							break;
+						}
+						else if (ch == '\n')
+						{
+							return;
+						}
+					}
+					break;
 				}
 			}
 		}
@@ -277,54 +301,61 @@ void CUI<T>::analysis_double()
 	Data* p = find(command);
 	if (p)
 	{
-		long long num = 0;
 		char ch;
 		std::cin.ignore(1024, ' ');
-		long long s = -1;
-		T sum;
-		while (true)
+		bool flag = true;
+		bool index;
+		while (flag)
 		{
-			ch = getchar();
-			if ('0' <= ch && ch <= '9')
+			T num;
+			index = true;
+			while (true)
 			{
-				num = num * 10 + ch - '0';
-				if (s != -1)
+				ch = getchar();
+				if ('0' <= ch && ch <= '9' || ch == '.')
 				{
-					s *= 10;
+					num += ch;
 				}
-			}
-			else if (ch == '.')
-			{
-				s = 1;
-			}
-			else if (ch == ' ')
-			{
-				sum = (T)(1.0*num/s);
-				p->s.insert(sum);
-				num = 0;
-				s = -1;
-			}
-			else if (ch == '\n')
-			{
-				sum = (T)(1.0*num/s);
-				p->s.insert(sum);
-				break;
-			}
-			else
-			{
-				num = 0;
-				s = 1;
-				while (true)
+				else if (ch == ' ')
 				{
-					ch = getchar();
-					if (ch == ' ')
-					{
-						break;
+					num = change(num);
+					if (num == "kk")
+					{				
 					}
-					else if (ch == '\n')
+					else
 					{
-						return;
+						p->s.insert(num);
 					}
+					break;
+				}
+				else if (ch == '\n')
+				{
+					num = change(num);
+					if (num == "kk")
+					{
+					}
+					else
+					{
+						p->s.insert(num);
+					}
+					flag = false;
+					break;
+				}
+				else
+				{
+					while (true)
+					{
+						ch = getchar();
+						if (ch == ' ')
+						{
+							break;
+						}
+						else if (ch == '\n')
+						{
+							return;
+						}
+					}
+					break;
 				}
 			}
 		}
@@ -345,9 +376,8 @@ void CUI<T>::analysis_char()
 	if (p)
 	{
 		char ch;
-		float s = 1;
 		std::cin.ignore(1024, ' ');
-		T sum;
+		std::string str;
 		while (true)
 		{
 			ch = getchar();
@@ -355,16 +385,36 @@ void CUI<T>::analysis_char()
 			{
 				break;
 			}
-			else if (ch == ' ')
+			else if (ch == ' ' || ch<'a' || ch>'z')
 			{
 				continue;
 			}
 			else
 			{
-				sum = ch;
-				p->s.insert(sum);
+				str = ch;
+				p->s.insert(str);
 			}
 		}
+	}
+	else
+	{
+		printf("NameError: set '%s' is not defined\n", command);
+		std::cin.ignore(1024, '\n');
+	}
+}
+
+template<class T>
+void CUI<T>::analysis_string()
+{
+	char command[100];
+	std::cin >> command;
+	Data* p = find(command);
+	if (p)
+	{
+		std::cin.ignore(1024, ' ');
+		T str;
+		getline(std::cin,str,'\n');
+		p->s.insert(str);
 	}
 	else
 	{
@@ -547,8 +597,9 @@ bool CUI<T>::judge(int index, char command[100])
 }
 
 template<class T>
-int CUI<T>::run()
+int CUI<T>::run(std::string str)
 {
+	data_type = str;
 	char command[100];
 	bool flag = true;
 	bool is_back = false;
@@ -716,21 +767,21 @@ int CUI<T>::run()
 		}
 		else if (strcmp(command, "insert") == 0)
 		{
-			if (typeid(T) == typeid(int))
+			if (data_type == "int")
 			{
 				analysis_int();
 			}
-			else if (typeid(T) == typeid(float))
-			{
-				analysis_float();
-			}
-			else if (typeid(T) == typeid(double))
+			else if (data_type == "double")
 			{
 				analysis_double();
 			}
-			else if (typeid(T) == typeid(char))
+			else if (data_type == "char")
 			{
 				analysis_char();
+			}
+			else if (data_type == "string")
+			{
+				analysis_string();
 			}
 		}
 		else if (strcmp(command, "ls") == 0)

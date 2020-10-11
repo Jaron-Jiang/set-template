@@ -76,7 +76,13 @@ public:
 	~set();
 
 	//改变集合指向禁止输入的函数
-	void add(bool(*Ban)(T));
+	void add1(bool(*Repeat)(T,T));
+
+	//改变集合指向禁止输入的函数
+	void add2(bool(*Cmp)(T,T));
+
+	//改变集合指向禁止输入的函数
+	void add3(bool(*Ban)(T));
 
 	//插入数据val
 	void insert(T val);
@@ -124,7 +130,19 @@ bool set<T>::compare(T a, T b)
 }
 
 template<class T>
-void set<T>::add(bool(*Ban)(T))
+void set<T>::add1(bool(*Repeat)(T,T))
+{
+	repeat = Repeat;
+}
+
+template<class T>
+void set<T>::add2(bool(*Cmp)(T,T))
+{
+	cmp = Cmp;
+}
+
+template<class T>
+void set<T>::add3(bool(*Ban)(T))
 {
 	ban = Ban;
 }
@@ -144,22 +162,7 @@ bool set<T>::judge_repeat(T a, T b)
 template<class T>
 void set<T>::Show(T a)
 {
-	if (typeid(T) == typeid(char))
-	{
-		std::cout << a;
-	}
-	else if (typeid(T) == typeid(int))
-	{
-		printf("%d ", a);
-	}
-	else if (typeid(T) == typeid(float))
-	{
-		printf("%f ",a);
-	}
-	else if (typeid(T) == typeid(double))
-	{
-		printf("%lf ",a);
-	}
+	std::cout << a << " ";
 }
 
 template<class T>

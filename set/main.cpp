@@ -17,11 +17,78 @@ bool ban(char val)
 class Object
 {
 private:
-	static bool ban(char val)
+	static bool repeat(std::string a,std::string b)
 	{
-		if ('a' <= val && val <= 'z')
+		return a == b;
+
+	}
+
+	static bool cmp1(std::string a, std::string b)
+	{
+		if (a.size() < b.size())
+		{
 			return true;
+		}
+		else if (a.size() > b.size())
+		{
+			return false;
+		}
+		unsigned int index = 0;
+		while (index < a.size())
+		{
+			if (a[index] < b[index])
+			{
+				return true;
+			}	
+			else if (a[index] > b[index])
+			{
+				return false;
+			}
+			index++;
+		}
 		return false;
+	}
+
+	static bool cmp2(std::string a, std::string b)
+	{
+		unsigned int num1 = 0, num2 = 0;
+		while (num1 < a.size()&&a[num1] != '.')
+		{
+			num1++;
+		}
+		while (num2 < b.size() && b[num2] != '.')
+		{
+			num2++;
+		}
+		if (num1 != num2)
+		{
+			return num1 < num2;
+		}
+		num1 = 0;
+		while (true)
+		{
+			if (a[num1] != b[num1])
+			{
+				return a[num1] < b[num1];
+			}
+			num1++;
+			if (num1 >= a.size())
+			{
+				return true;
+			}
+			if (num2 >= b.size())
+			{
+				return false;
+			}
+				
+		}
+		return false;
+	}
+
+	static bool cmp3(std::string a, std::string b)
+	{
+		return a <= b;
+
 	}
 
 	void first()
@@ -81,11 +148,11 @@ private:
 		}
 		std::string str = "请选择要使用的那种数据类型的集合";
 		print(str);
-		str = "1. int                2. float";
+		str = "1. int                2. double";
 		print(str);
-		str = "3. double             4. char ";
+		str = "3. char               4. string";
 		print(str);
-		str = "5. back               6. exit ";
+		str = "5. back               6. exit  "; 
 		print(str);
 	}
 
@@ -192,28 +259,29 @@ public:
 			int x = 0, y = 0;
 			change(x, y);
 			system("cls");
+			
 			if (x == x1 && y == y1)
 			{
-				CUI<int>a;
-				flag = a.run();
+				CUI<std::string>a(repeat,cmp1);
+				flag = a.run("int");
 				one = false;
 			}
 			else if (x == x1 + 22 && y == y1)
 			{
-				CUI<float>a;
-				flag = a.run();
+				CUI<std::string>a(repeat,cmp2);
+				flag = a.run("double");
 				one = false;
 			}
 			else if (x == x1 && y == y1 + 1)
 			{
-				CUI<double>a;
-				flag = a.run();
+				CUI<std::string>a(repeat,cmp3);
+				flag = a.run("char");
 				one = false;
 			}
 			else if (x == x1 + 22 && y == y1 + 1)
 			{
-				CUI<char>a(ban);
-				flag = a.run();
+				CUI<std::string>a(repeat,cmp3);
+				flag = a.run("string");
 				one = false;
 			}
 			else if(x == x1 +22 && y == y1 + 2)
