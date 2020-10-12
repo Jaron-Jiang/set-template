@@ -65,6 +65,8 @@ private:
 	//寻找结点p及以后是否存在元素val，如果存在返回指向其的指针，如果不存在则返回NULL
 	Data* find(Data* p, T& val);
 
+	std::string data_type;
+
 public:
 	//构造函数，f指向判断元素是否重复的函数，ff指向比较元素大小的函数，fff指向判断不可加入的元素的判断
 	set(bool(*Repeat)(T, T) = NULL, bool(*Compare)(T, T) = NULL,bool(*Ban)(T) = NULL);
@@ -121,6 +123,8 @@ public:
 
 	//f指向输出元素的函数
 	void show(void(*SHOW)(T) = Show);	
+
+	void change_data_type(std::string str);
 };
 
 template<class T>
@@ -179,7 +183,10 @@ void set<T>::show(void(*SHOW)(T))
 		SHOW(p->data);
 		p = p->next;
 	}
-	std::cout << std::endl;
+	if (data_type != "string")
+	{
+		std::cout << std::endl;
+	}
 }
 
 template<class T>
@@ -659,4 +666,10 @@ const set<T>  set<T>::operator+(const set& a) const
 		p2 = p2->next;
 	}
 	return s;
+}
+
+template<class T>
+void set<T>::change_data_type(std::string str)
+{
+	data_type = str;
 }

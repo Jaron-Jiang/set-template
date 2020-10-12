@@ -34,6 +34,10 @@ private:
 	bool(*cmp)(T a, T b);
 	bool judge(int index, char command[100]);
 	std::string change(std::string str);
+	static void Show(T val)
+	{
+		std::cout << val << std::endl;
+	}
 public:
 	int run(std::string str);
 	CUI(bool(*Repeat)(T,T),bool(*Cmp)(T,T));
@@ -90,7 +94,8 @@ void CUI<T>::push_back(char command[100])
 	p->next = NULL;
 	p->s.add1(repeat);
 	p->s.add2(cmp);
-	p->s.add3(NULL);	
+	p->s.add3(NULL);
+	p->s.change_data_type(data_type);
 	strcpy_s(p->name, command);
 	if (length == 0)
 	{
@@ -634,7 +639,14 @@ int CUI<T>::run(std::string str)
 				while (p)
 				{
 					std::cout << p->name << "\t";
-					p->s.show();
+					if (data_type == "string")
+					{
+						p->s.show(Show);
+					}
+					else
+					{
+						p->s.show();
+					}
 					p = p->next;
 				}
 			}
@@ -643,7 +655,14 @@ int CUI<T>::run(std::string str)
 				p = find(command);
 				if (p)
 				{
-					p->s.show();
+					if (data_type == "string")
+					{
+						p->s.show(Show);
+					}
+					else
+					{
+						p->s.show();
+					}
 				}
 				else
 				{
@@ -761,7 +780,14 @@ int CUI<T>::run(std::string str)
 				}
 				else
 				{
-					s.show();
+					if (data_type == "string")
+					{
+						s.show(Show);
+					}
+					else
+					{
+						s.show();
+					}
 				}
 			}
 		}
