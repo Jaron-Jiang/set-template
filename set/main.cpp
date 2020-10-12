@@ -24,32 +24,48 @@ private:
 
 	static bool cmp1(std::string a, std::string b)
 	{
-		if (a.size() < b.size())
+		if (a[0] == '-'&&b[0] != '-')
 		{
 			return true;
 		}
-		else if (a.size() > b.size())
+		if (a[0] == '-'&&b[0] != '-')
 		{
 			return false;
+		}
+		if (a.size() < b.size())
+		{
+			return a[0] == '-' ? false : true;
+		}
+		else if (a.size() > b.size())
+		{
+			return a[0] == '-' ? true : false;
 		}
 		unsigned int index = 0;
 		while (index < a.size())
 		{
 			if (a[index] < b[index])
 			{
-				return true;
+				return a[0] == '-' ? false : true;
 			}	
 			else if (a[index] > b[index])
 			{
-				return false;
+				return a[0] == '-' ? true : false;
 			}
 			index++;
 		}
-		return false;
+		return a[0] == '-' ? true : false;
 	}
 
 	static bool cmp2(std::string a, std::string b)
 	{
+		if (a[0] == '-'&&b[0] != '-')
+		{
+			return true;
+		}
+		if (b[0] == '-'&&a[0] != '-')
+		{
+			return false;
+		}
 		unsigned int num1 = 0, num2 = 0;
 		while (num1 < a.size()&&a[num1] != '.')
 		{
@@ -61,6 +77,10 @@ private:
 		}
 		if (num1 != num2)
 		{
+			if (a[0] == '-')
+			{
+				return num2 < num1;
+			}
 			return num1 < num2;
 		}
 		num1 = 0;
@@ -68,25 +88,32 @@ private:
 		{
 			if (a[num1] != b[num1])
 			{
-				return a[num1] < b[num1];
+				if (a[0] == '-')
+				{
+					return b[num1] < a[num1];
+				}
+				else
+				{
+					return a[num1] < b[num1];
+				}
 			}
 			num1++;
 			if (num1 >= a.size())
 			{
-				return true;
+				return a[0] == '-' ? false : true;
 			}
 			if (num2 >= b.size())
 			{
-				return false;
+				return a[0] == '-' ? true : false;
 			}
 				
 		}
-		return false;
+		return a[0] == '-' ? true : false;
 	}
 
 	static bool cmp3(std::string a, std::string b)
 	{
-		return a <= b;
+		return a < b;
 
 	}
 
