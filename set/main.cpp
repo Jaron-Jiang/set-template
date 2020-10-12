@@ -104,7 +104,7 @@ private:
 		std::cout << std::endl << std::endl << std::endl;
 		str = "功能";
 		print(str);
-		str = "1. 通过使用操作命令，可以对char，int，float，double的集合，进行混合表达式运算";
+		str = "1. 通过使用操作命令，可以对char，int，double，string的集合，进行混合表达式运算";
 		print(str);
 		str = "2. 通过代码修改，可以对任意类型进行混合运算                                  ";
 		print(str);
