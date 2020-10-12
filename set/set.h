@@ -160,7 +160,7 @@ set<T>::~set()
 template<class T>
 bool set<T>::judge_repeat(T a, T b)
 {
-	return memcmp(&a, &b, sizeof(T)) == 0;
+	return a == b;
 }
 
 template<class T>
