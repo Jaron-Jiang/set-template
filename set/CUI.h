@@ -159,7 +159,15 @@ void CUI<T>::erase(Data* p)
 template<class T>
 std::string CUI<T>::change(std::string str)
 {
+	if (str.size() == 0 || str.size() == 1 && str[0] == '-')
+	{
+		return "kk";
+	}
 	int start = 0, end = str.size() - 1;
+	if (str[0] == '-')
+	{
+		start = 1;
+	}
 	int count = 0;
 	for (int i = 0; i < end; i++)
 	{
@@ -180,17 +188,20 @@ std::string CUI<T>::change(std::string str)
 		}
 		start++;
 	}
-	while (start < end)
+	if (count != 0 && str[end]!='.')
 	{
-		if (str[end] != '0' || str[end] == '.')
+		while (start < end)
 		{
-			break;
+			if (str[end] != '0' || str[end] == '.')
+			{
+				break;
+			}
+			end--;
 		}
-		end--;
 	}
 	if (start == end)
 	{
-		if (str[end] != '.')
+		if (str[end] != '.'&&str[start]!='-')
 			return str = str[start];
 		return "0";
 	}
@@ -204,11 +215,19 @@ std::string CUI<T>::change(std::string str)
 		else if (str[end] == '.')
 		{
 			std::string str1(str, start, end - start);
+			if (str[0] == '-')
+			{
+				return '-' + str1;
+			}
 			return str1;
 		}
 		else
 		{
 			std::string str1(str, start, end - start+1);
+			if (str[0] == '-')
+			{
+				return '-' + str1;
+			}
 			return str1;
 		}
 	}
@@ -239,7 +258,7 @@ void CUI<T>::analysis_int()
 					{
 						if (ch != '0')
 						{
-							num = ch;
+							num += ch;
 							index = false;
 						}
 					}
@@ -250,7 +269,7 @@ void CUI<T>::analysis_int()
 				}
 				else if (ch == ' ')
 				{
-					if (num.size() == 0)
+					if (num.size() == 0 || num.size()==1&&(num[0]=='-'||num[0]=='+'))
 					{
 						p->s.insert("0");
 					}
@@ -274,6 +293,15 @@ void CUI<T>::analysis_int()
 				}
 				else
 				{
+					if (ch == '-'&&num.size() == 0)
+					{
+						num += ch;
+						continue;
+					}
+					if (ch == '+'&&num.size() == 0)
+					{
+						continue;
+					}
 					while (true)
 					{
 						ch = getchar();
@@ -348,6 +376,15 @@ void CUI<T>::analysis_double()
 				}
 				else
 				{
+					if (ch == '-'&&num.size() == 0)
+					{
+						num += ch;
+						continue;
+					}
+					if (ch == '+'&&num.size() == 0)
+					{
+						continue;
+					}
 					while (true)
 					{
 						ch = getchar();
