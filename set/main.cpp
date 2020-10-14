@@ -1,3 +1,5 @@
+#ifndef _TEST_H_
+#define _TEST_H_
 #include<iostream>
 #include<string>
 #include<conio.h>
@@ -383,3 +385,4 @@ int main()
 	}*/
 	return 0;
 }
+#endif

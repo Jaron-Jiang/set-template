@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _TEST_H_
+#define _TEST_H_
 #include<iostream>
 class instruction
 {
@@ -179,3 +180,4 @@ void instruction::run()
 		printf("NameError:\"%s\" is not define\n",command);
 	}
 }
+#endif

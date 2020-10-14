@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _TEST_H_
+#define _TEST_H_
 #include "set.h"
 #include<cstdio>
 #include<iostream>
@@ -937,3 +938,4 @@ int CUI<T>::run(std::string str)
 	}
 	return is_back;
 }
+#endif

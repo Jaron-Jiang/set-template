@@ -1,6 +1,5 @@
-#pragma once
-#include <typeinfo>
-
+#ifndef _TEST_H_
+#define _TEST_H_
 template<class T>
 class set
 {
@@ -673,3 +672,5 @@ void set<T>::change_data_type(std::string str)
 {
 	data_type = str;
 }
+
+#endif
