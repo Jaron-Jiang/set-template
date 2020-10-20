@@ -9,39 +9,41 @@ template<class T>
 class CUI
 {
 private:
+	//每一个变量的信息，同时使用链表将每一个变量连接起来
 	struct Data
 	{
-		char name[100];
-		set<T>s;
-		Data* next;
-		Data* ahead;
+		char name[100];//记录变量名字
+		set<T>s;//变量代表的集合
+		Data* next;//指向下一个变量
+		Data* ahead;//指向前一个变量
 	};
-	std::string data_type;
-	int length;
-	Data* head;
-	Data* rear;
-	void clean();
-	Data* find(char command[100]);
-	void push_back(char command[100]);
-	void show();
-	void erase(Data* p);
-	void analysis_int();
-	void analysis_double();
-	void analysis_char();
-	void analysis_string();
-	set<T> analysis_com(int& index, int L,char command[100],bool& flag,int count = 1);
-	bool(*repeat)(T a, T b);
-	bool(*cmp)(T a, T b);
-	bool judge(int index, char command[100]);
-	std::string change(std::string str);
+	std::string data_type;//记录选择的数据类型
+	int length;//变量个数
+	Data* head;//指向变量链表中的第一个变量
+	Data* rear;//指向变量链表中的最后一个变量
+	void clean();//清空所有变量
+	Data* find(char command[100]);//寻找名字为command中存储的字符串的变量，如果存在返回一个指向该变量的指针，否则返回NULL
+	void push_back(char command[100]);//在变量链表的尾结点后添加一个新的变量结点，该变量名字为command中存储的字符串
+	void show();//展示变量信息
+	void erase(Data* p);//删除结点p，即删除p指向的变量
+	void analysis_int();//对int类型的数据插入表达式进行分析，并进行数据插入
+	void analysis_double();//对double类型的数据插入表达式进行分析，并进行数据插入
+	void analysis_char();//对char类型的数据插入表达式进行分析，并进行数据插入
+	void analysis_string();//对string类型的数据插入表达式进行分析，并进行数据插入
+	set<T> analysis_com(int& index, int L,char command[100],bool& flag,int count = 1);//进行混合运算表达式，index表示对command中第index-1个字符操作，L表示表达式的长度即command的长度，flag记录表达式是否有误，count表示计算层级
+	bool(*repeat)(T a, T b);//指向判断数据重复的函数
+	bool(*cmp)(T a, T b);//指向比较数据大小的函数
+	bool judge(int index, char command[100]);//用于analysis_com()函数，判断数组command中index位置以前的字符情况
+	std::string change(std::string str);//用于浮点数数据插入表示式的解析，辅助analysis_double函数
+	//内置默认展示函数
 	static void Show(T val)
 	{
 		std::cout << val << std::endl;
-	}
+	}  
 public:
-	int run(std::string str);
-	CUI(bool(*Repeat)(T,T),bool(*Cmp)(T,T));
-	~CUI();
+	int run(std::string str);//运行函数，相当于该类的main函数
+	CUI(bool(*Repeat)(T,T),bool(*Cmp)(T,T));//构造函数
+	~CUI();//析构函数
 };
 
 template<class T>
@@ -715,7 +717,6 @@ int CUI<T>::run(std::string str)
 			{
 				T val;
 				std::cin >> val;
-
 				p->s.erase(val);
 			}
 			else

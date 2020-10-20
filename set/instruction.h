@@ -3,21 +3,34 @@
 class instruction
 {
 private:
+	//clean命令的说明文档
 	void _clean();
+	//assign命令的说明文档
 	void _assign();
+	//show命令的说明文档
 	void _show();
+	//erase命令的说明文档
 	void _erase();
+	//size命令的说明文档
 	void _size();
+	//quit命令的说明文档
 	void _quit();
+	//com命令的说明文档
 	void _com();
+	//insert命令的说明文档
 	void _insert();
+	//ls命令的说明文档
 	void _ls();
+	//delete命令的说明文档
 	void _delete();
+	//find命令的说明文档
 	void _find();
+	//subset命令的说明文档
 	void _subset();
+	//back命令的说明文档
 	void _back();
 public:
-	void run();
+	void run();//该类的运行函数，相当于main函数
 };
 
 void instruction::_clean()

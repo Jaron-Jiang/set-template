@@ -16,12 +16,14 @@ bool ban(char val)
 class Object
 {
 private:
+	//内置重复判断函数
 	static bool repeat(std::string a,std::string b)
 	{
 		return a == b;
 
 	}
 
+	//用于比较int类型的大小
 	static bool cmp1(std::string a, std::string b)
 	{
 		if (a[0] == '-'&&b[0] != '-')
@@ -56,6 +58,7 @@ private:
 		return a[0] == '-' ? true : false;
 	}
 
+	//用于比较double类型的大小
 	static bool cmp2(std::string a, std::string b)
 	{
 		if (a[0] == '-'&&b[0] != '-')
@@ -111,12 +114,14 @@ private:
 		return a[0] == '-' ? true : false;
 	}
 
+	//用于比较char和string类型的大小
 	static bool cmp3(std::string a, std::string b)
 	{
 		return a < b;
 
 	}
 
+	//用第一界面的展示
 	void first()
 	{
 		for (int i = 1; i <= 120; i++)
@@ -166,6 +171,7 @@ private:
 
 	}
 
+	//用于第二个界面的展示
 	void second()
 	{
 		for (int i = 1; i <= 9; i++)
@@ -182,6 +188,7 @@ private:
 		print(str);
 	}
 
+	//打印函数
 	void print(std::string str)
 	{
 		int L = (120 - str.size()) / 2;
@@ -192,6 +199,7 @@ private:
 		std::cout << str << std::endl;
 	}
 
+	//控制光标,用于第二界面中数据类型的选取
 	void change(int& x,int& y)
 	{
 		int ch;
@@ -266,6 +274,7 @@ private:
 	}
 
 public:
+	//该类的运行函数，相当于main函数
 	void run()
 	{
 		bool one = true;

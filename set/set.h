@@ -102,6 +102,7 @@ public:
 	//查看集合中是否存在元素val
 	bool find(T val);
 
+	//子集判断，判断调用该函数的集合是否为a集合的子集
 	bool judge_subset(const set& a);
 
 	//对=的重载
@@ -122,6 +123,7 @@ public:
 	//f指向输出元素的函数
 	void show(void(*SHOW)(T) = Show);	
 
+	//记录集合表示的数据类型
 	void change_data_type(std::string str);
 };
 
